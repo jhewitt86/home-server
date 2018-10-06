@@ -1,0 +1,28 @@
+query {
+    messages {
+        id
+        text
+        user {
+            id
+            username
+        }
+    }
+}
+
+mutation {
+    updateMessage(id: 1, text: "Hello") {
+        id
+        text,
+    }
+}
+
+mutation {
+    createMessage(text: "wfwefwefwefwefewf") {
+        id
+        text,
+    }
+}
+
+mutation {
+    deleteMessage(id: "1")
+}
