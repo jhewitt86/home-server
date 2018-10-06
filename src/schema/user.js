@@ -11,6 +11,8 @@ const userSchema = gql`
     id: ID!
     username: String!
     messages: [Message!]
+    createdAt: String!
+    updatedAt: String!
   }
 `;
 

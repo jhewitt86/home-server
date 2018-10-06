@@ -2,22 +2,27 @@ const uuid = require("uuid");
 
 const userResolver = {
   Query: {
-    users: (parent, args, { models }) => {
-      return Object.values(models.users);
+    users: async (parent, args, { models }) => {
+      return await models.User.findAll();
     },
-    user: (parent, { id }, { models }) => {
-      return models.users[id];
+    user: async (parent, { id }, { models }) => {
+      return await models.User.findById(id);
     },
-    me: (parent, args, { me }) => {
-      return me;
+    me: async (parent, args, { models, me }) => {
+      return await models.User.findById(me.id);
+      if (!me) {
+        return null;
+      }
     }
   },
 
   User: {
-    messages: (user, args, { models }) => {
-      return Object.values(models.messages).filter(
-        message => message.userId === user.id
-      );
+    messages: async (user, args, { models }) => {
+      return await models.Message.findAll({
+        where: {
+          userId: user.id
+        }
+      });
     }
   }
 };

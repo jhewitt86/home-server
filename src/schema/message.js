@@ -16,8 +16,8 @@ const messageSchema = gql`
     id: ID!
     text: String!
     user: User!
-    created: String!
-    updated: String!
+    createdAt: String!
+    updatedAt: String!
   }
 `;
 
