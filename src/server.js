@@ -15,11 +15,10 @@ const app = express();
 app.use(cors());
 
 const getMe = async req => {
-  const token = req.headers["x-token"];
-
+  const token = req.headers.authorization;
   if (token) {
     try {
-      return await jwt.verify(token, process.env.SECRET);
+      return await jwt.verify(token, process.env.AUTH_SECRET);
     } catch (e) {
       console.log(e);
       throw new AuthenticationError("Your session expired. Sign in again.");
@@ -50,6 +49,8 @@ const server = new ApolloServer({
     if (req) {
       const me = await getMe(req);
 
+      console.log(me);
+
       return {
         models,
         me,
@@ -64,7 +65,7 @@ server.applyMiddleware({ app, path: "/graphql" });
 const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
-const eraseDatabaseOnSync = true;
+const eraseDatabaseOnSync = false;
 
 sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
   if (eraseDatabaseOnSync) {
@@ -78,14 +79,61 @@ sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
 const createUsersWithMessages = async date => {
   await models.User.create(
     {
-      username: "rwieruch",
-      email: "hello@robin.com",
-      password: "rwieruch",
+      username: "jthewz",
+      email: "talk@mytryx.com",
+      password: "Jeremy2004",
       role: "ADMIN",
+      avatar: "https://randomuser.me/api/portraits/men/11.jpg",
       messages: [
         {
-          text: "Published the Road to learn React",
-          createdAt: date.setSeconds(date.getSeconds() + 1)
+          title: "I'm quitting drinking today",
+          body:
+            "I've been drinking for 22 years, and in that time I've lost...",
+          public: true
+        }
+      ]
+    },
+    {
+      include: [models.Message]
+    }
+  );
+  await models.User.create(
+    {
+      username: "jthewz21",
+      email: "tal13k@mytryx.com",
+      password: "Jeremy2004",
+      role: "ADMIN",
+      avatar: "https://randomuser.me/api/portraits/men/18.jpg",
+      messages: [
+        {
+          title: "My partner left me - pls cheer me up",
+          body:
+            "We have 3 children, we've been married 10 years, and last night he just walked out...",
+          public: false
+        }
+      ]
+    },
+    {
+      include: [models.Message]
+    }
+  );
+  await models.User.create(
+    {
+      username: "msingh123",
+      email: "talk1221@mytryx.com",
+      password: "Jeremy2004",
+      role: "ADMIN",
+      avatar: "https://randomuser.me/api/portraits/women/10.jpg",
+      messages: [
+        {
+          title: "Who wants to come see Jurassic World?",
+          body: "Calling out all dinosaur nerds...",
+          public: false
+        },
+        {
+          title: "Dealing with loss",
+          body: "Some tips for dealing with the loss of a loved one...",
+          public: true
         }
       ]
     },
@@ -96,17 +144,80 @@ const createUsersWithMessages = async date => {
 
   await models.User.create(
     {
-      username: "ddavids",
-      email: "hello@david.com",
-      password: "ddavids",
+      username: "msingh",
+      email: "talk1@mytryx.com",
+      password: "Jeremy2004",
+      role: "ADMIN",
+      avatar: "https://randomuser.me/api/portraits/women/11.jpg",
       messages: [
         {
-          text: "Happy to release ...",
-          createdAt: date.setSeconds(date.getSeconds() + 1)
+          title: "Any lawyers here?",
+          body: "I don't like asking for favours, but this is serious...",
+          public: true
         },
         {
-          text: "Published a complete ...",
-          createdAt: date.setSeconds(date.getSeconds() + 1)
+          title: "After hours doctors clinics in Melbourne?",
+          body: "What's out there?...",
+          public: true
+        }
+      ]
+    },
+    {
+      include: [models.Message]
+    }
+  );
+  await models.User.create(
+    {
+      username: "msingh2",
+      email: "talk4@mytryx.com",
+      password: "Jeremy2004",
+      role: "ADMIN",
+      avatar: "https://randomuser.me/api/portraits/women/13.jpg",
+      messages: [
+        {
+          title: "I got a new job",
+          body: "It took ages, but I'm finally working again...",
+          public: true
+        },
+        {
+          title: "Ideas for Xmas holidays?",
+          body:
+            "I'll have the kids this year, how can I keep them entertained?...",
+          public: true
+        },
+        {
+          title: "Just moved to Sydney, where's everyone at?",
+          body: "Help me get settled :)",
+          public: true
+        },
+        {
+          title: "Dog parks in Maidstone?",
+          body: "Anyone know any good places?",
+          public: true
+        }
+      ]
+    },
+    {
+      include: [models.Message]
+    }
+  );
+  await models.User.create(
+    {
+      username: "bjones",
+      email: "talk2@mytryx.com",
+      password: "Jeremy2004",
+      role: "ADMIN",
+      avatar: "https://randomuser.me/api/portraits/men/23.jpg",
+      messages: [
+        {
+          title: "I finally left Tom",
+          body: "I'm worried he'll find me...",
+          public: false
+        },
+        {
+          title: "100 days since I last took a punt",
+          body: "It's been a struggle, but today I'm celebrating...",
+          public: true
         }
       ]
     },

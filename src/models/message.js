@@ -1,11 +1,20 @@
 const message = (sequelize, DataTypes) => {
   const Message = sequelize.define("message", {
-    text: {
+    title: {
       type: DataTypes.STRING,
       validate: {
         notEmpty: {
           args: true,
-          msg: "A message has to have text."
+          msg: "A message has to have a title."
+        }
+      }
+    },
+    body: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: "A message has to have a body."
         }
       }
     },
@@ -14,6 +23,9 @@ const message = (sequelize, DataTypes) => {
     },
     updatedAt: {
       type: DataTypes.DATE
+    },
+    public: {
+      type: DataTypes.BOOLEAN
     }
   });
 

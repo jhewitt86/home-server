@@ -7,9 +7,9 @@ const messageSchema = gql`
   }
 
   extend type Mutation {
-    createMessage(text: String!): Message!
+    createMessage(title: String!, body: String!, public: Boolean!): Message!
     deleteMessage(id: ID!): Boolean!
-    updateMessage(id: ID!, text: String!): Message!
+    updateMessage(id: ID!, body: String!): Message!
   }
 
   type MessageConnection {
@@ -24,10 +24,12 @@ const messageSchema = gql`
 
   type Message {
     id: ID!
-    text: String!
+    title: String!
+    body: String!
     user: User!
     createdAt: String!
     updatedAt: String!
+    public: Boolean!
   }
 
   extend type Subscription {

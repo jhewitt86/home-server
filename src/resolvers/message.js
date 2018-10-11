@@ -44,11 +44,13 @@ const messageResolver = {
 
   Mutation: {
     createMessage: combineResolvers(
-      isAuthenticated,
-      async (parent, { text }, { models, me }) => {
+      // isAuthenticated,
+      async (parent, { title, body, public }, { models, me }) => {
         const message = await models.Message.create({
-          text,
-          userId: me.id
+          title,
+          body,
+          userId: me.id,
+          public
         });
 
         pubsub.publish(EVENTS.MESSAGE.CREATED, {

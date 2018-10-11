@@ -25,6 +25,7 @@ const userSchema = gql`
     messages: [Message!]
     createdAt: String!
     updatedAt: String!
+    avatar: String
   }
 `;
 

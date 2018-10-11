@@ -47,6 +47,9 @@ const user = (sequelize, DataTypes) => {
     },
     updatedAt: {
       type: DataTypes.DATE
+    },
+    avatar: {
+      type: DataTypes.STRING
     }
   });
 
