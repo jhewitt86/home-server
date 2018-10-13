@@ -11,7 +11,6 @@ const fromCursorHash = string =>
 const commentResolver = {
   Query: {
     comments: async (parent, { cursor, limit = 100 }, { models }) => {
-      console.log("........");
       const cursorOptions = cursor
         ? {
             where: {
@@ -21,8 +20,9 @@ const commentResolver = {
             }
           }
         : {};
+
       const comments = await models.Comment.findAll({
-        order: [["createdAt", "DESC"]],
+        order: [["createdAt", "ASC"]],
         limit: limit + 1,
         ...cursorOptions
       });
@@ -49,13 +49,22 @@ const commentResolver = {
     createComment: combineResolvers(
       // isAuthenticated,
       async (parent, { body, messageId }, { models, me }) => {
-        console.log(parent);
         const comment = await models.Comment.create({
           body,
           messageId: messageId,
           userId: me.id
         });
 
+        // Increment message comment count
+        const message = await models.Message.findById(messageId);
+        if (!message) {
+          return false;
+        } else {
+          await message.increment("commentCount");
+        }
+        pubsub.publish(EVENTS.MESSAGE.UPDATED, {
+          messageUpdated: { message }
+        });
         pubsub.publish(EVENTS.COMMENT.CREATED, {
           commentCreated: { comment }
         });
@@ -68,7 +77,27 @@ const commentResolver = {
       isAuthenticated,
       isCommentOwner,
       async (parent, { id }, { models }) => {
-        return await models.Comment.destroy({ where: { id } });
+        const comment = await models.Comment.findById(id);
+        if (comment) {
+          const messageId = comment.messageId;
+          const message = await models.Message.findById(messageId);
+          if (!message) {
+            return false;
+          } else {
+            await models.Comment.destroy({ where: { id } });
+            await message.decrement("commentCount");
+          }
+          pubsub.publish(EVENTS.MESSAGE.UPDATED, {
+            messageUpdated: { message }
+          });
+          pubsub.publish(EVENTS.COMMENT.DELETED, {
+            commentDeleted: { comment }
+          });
+
+          return comment;
+        } else {
+          return null;
+        }
       }
     )
   },
@@ -85,6 +114,12 @@ const commentResolver = {
   Subscription: {
     commentCreated: {
       subscribe: () => pubsub.asyncIterator(EVENTS.COMMENT.CREATED)
+    },
+    commentDeleted: {
+      subscribe: () => pubsub.asyncIterator(EVENTS.COMMENT.DELETED)
+    },
+    messageUpdated: {
+      subscribe: () => pubsub.asyncIterator(EVENTS.MESSAGE.UPDATED)
     }
   }
 };

@@ -39,9 +39,14 @@ const messageSchema = gql`
 
   extend type Subscription {
     messageCreated: MessageCreated!
+    messageUpdated: MessageUpdated!
   }
 
   type MessageCreated {
+    message: Message!
+  }
+
+  type MessageUpdated {
     message: Message!
   }
 `;

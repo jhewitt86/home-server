@@ -8,7 +8,7 @@ const commentSchema = gql`
 
   extend type Mutation {
     createComment(body: String!, messageId: String!): Comment!
-    deleteComment(id: ID!): Boolean!
+    deleteComment(id: ID!): Comment!
     updateComment(id: ID!, body: String!): Comment!
   }
 
@@ -28,10 +28,14 @@ const commentSchema = gql`
 
   extend type Subscription {
     commentCreated: CommentCreated!
+    commentDeleted: CommentDeleted!
   }
 
   type CommentCreated {
     comment: Comment!
+  }
+  type CommentDeleted {
+    result: Boolean!
   }
 `;
 

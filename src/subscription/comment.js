@@ -1,3 +1,4 @@
 const CREATED = "CREATED";
+const DELETED = "DELETED";
 
-module.exports = { CREATED };
+module.exports = { CREATED, DELETED };

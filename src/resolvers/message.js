@@ -125,7 +125,8 @@ const messageResolver = {
       return await models.Comment.findAll({
         where: {
           messageId: message.id
-        }
+        },
+        order: [["createdAt", "DESC"]]
       });
     }
   },
