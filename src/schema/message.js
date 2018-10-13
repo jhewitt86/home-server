@@ -30,6 +30,7 @@ const messageSchema = gql`
     createdAt: String!
     updatedAt: String!
     public: Boolean!
+    comments: [Comment!]
   }
 
   extend type Subscription {

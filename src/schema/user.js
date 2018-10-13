@@ -23,6 +23,7 @@ const userSchema = gql`
     email: String!
     role: String
     messages: [Message!]
+    comments: [Comment!]
     createdAt: String!
     updatedAt: String!
     avatar: String

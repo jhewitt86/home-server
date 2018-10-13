@@ -11,6 +11,7 @@ const fromCursorHash = string =>
 const messageResolver = {
   Query: {
     messages: async (parent, { cursor, limit = 100 }, { models }) => {
+      console.log("........");
       const cursorOptions = cursor
         ? {
             where: {
@@ -89,9 +90,15 @@ const messageResolver = {
   Message: {
     user: async (message, args, { models }) => {
       return await models.User.findById(message.userId);
+    },
+    comments: async (message, args, { models }) => {
+      return await models.Comment.findAll({
+        where: {
+          messageId: message.id
+        }
+      });
     }
   },
-
   Subscription: {
     messageCreated: {
       subscribe: () => pubsub.asyncIterator(EVENTS.MESSAGE.CREATED)

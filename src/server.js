@@ -48,9 +48,6 @@ const server = new ApolloServer({
 
     if (req) {
       const me = await getMe(req);
-
-      console.log(me);
-
       return {
         models,
         me,
@@ -65,7 +62,7 @@ server.applyMiddleware({ app, path: "/graphql" });
 const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
-const eraseDatabaseOnSync = false;
+const eraseDatabaseOnSync = true;
 
 sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
   if (eraseDatabaseOnSync) {
@@ -94,135 +91,15 @@ const createUsersWithMessages = async date => {
       ]
     },
     {
-      include: [models.Message]
+      include: [models.Message, models.Comment]
     }
   );
-  await models.User.create(
-    {
-      username: "jthewz21",
-      email: "tal13k@mytryx.com",
-      password: "Jeremy2004",
-      role: "ADMIN",
-      avatar: "https://randomuser.me/api/portraits/men/18.jpg",
-      messages: [
-        {
-          title: "My partner left me - pls cheer me up",
-          body:
-            "We have 3 children, we've been married 10 years, and last night he just walked out...",
-          public: false
-        }
-      ]
-    },
-    {
-      include: [models.Message]
-    }
-  );
-  await models.User.create(
-    {
-      username: "msingh123",
-      email: "talk1221@mytryx.com",
-      password: "Jeremy2004",
-      role: "ADMIN",
-      avatar: "https://randomuser.me/api/portraits/women/10.jpg",
-      messages: [
-        {
-          title: "Who wants to come see Jurassic World?",
-          body: "Calling out all dinosaur nerds...",
-          public: false
-        },
-        {
-          title: "Dealing with loss",
-          body: "Some tips for dealing with the loss of a loved one...",
-          public: true
-        }
-      ]
-    },
-    {
-      include: [models.Message]
-    }
-  );
-
-  await models.User.create(
-    {
-      username: "msingh",
-      email: "talk1@mytryx.com",
-      password: "Jeremy2004",
-      role: "ADMIN",
-      avatar: "https://randomuser.me/api/portraits/women/11.jpg",
-      messages: [
-        {
-          title: "Any lawyers here?",
-          body: "I don't like asking for favours, but this is serious...",
-          public: true
-        },
-        {
-          title: "After hours doctors clinics in Melbourne?",
-          body: "What's out there?...",
-          public: true
-        }
-      ]
-    },
-    {
-      include: [models.Message]
-    }
-  );
-  await models.User.create(
-    {
-      username: "msingh2",
-      email: "talk4@mytryx.com",
-      password: "Jeremy2004",
-      role: "ADMIN",
-      avatar: "https://randomuser.me/api/portraits/women/13.jpg",
-      messages: [
-        {
-          title: "I got a new job",
-          body: "It took ages, but I'm finally working again...",
-          public: true
-        },
-        {
-          title: "Ideas for Xmas holidays?",
-          body:
-            "I'll have the kids this year, how can I keep them entertained?...",
-          public: true
-        },
-        {
-          title: "Just moved to Sydney, where's everyone at?",
-          body: "Help me get settled :)",
-          public: true
-        },
-        {
-          title: "Dog parks in Maidstone?",
-          body: "Anyone know any good places?",
-          public: true
-        }
-      ]
-    },
-    {
-      include: [models.Message]
-    }
-  );
-  await models.User.create(
-    {
-      username: "bjones",
-      email: "talk2@mytryx.com",
-      password: "Jeremy2004",
-      role: "ADMIN",
-      avatar: "https://randomuser.me/api/portraits/men/23.jpg",
-      messages: [
-        {
-          title: "I finally left Tom",
-          body: "I'm worried he'll find me...",
-          public: false
-        },
-        {
-          title: "100 days since I last took a punt",
-          body: "It's been a struggle, but today I'm celebrating...",
-          public: true
-        }
-      ]
-    },
-    {
-      include: [models.Message]
-    }
-  );
+  await models.Comment.create({
+    body: "Testing 123",
+    messageId: 1
+  });
+  await models.Comment.create({
+    body: "Testing 45678",
+    messageId: 1
+  });
 };

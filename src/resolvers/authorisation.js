@@ -20,4 +20,14 @@ const isMessageOwner = async (parent, { id }, { models, me }) => {
   return skip;
 };
 
-module.exports = { isAuthenticated, isAdmin, isMessageOwner };
+const isCommentOwner = async (parent, { id }, { models, me }) => {
+  const comment = await models.Comment.findById(id, { raw: true });
+
+  if (comment.userId !== me.id) {
+    throw new ForbiddenError("Not authenticated as owner.");
+  }
+
+  return skip;
+};
+
+module.exports = { isAuthenticated, isAdmin, isMessageOwner, isCommentOwner };

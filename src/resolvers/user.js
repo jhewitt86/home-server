@@ -73,6 +73,13 @@ const userResolver = {
           userId: user.id
         }
       });
+    },
+    comments: async (user, args, { models }) => {
+      return await models.Comment.findAll({
+        where: {
+          userId: user.id
+        }
+      });
     }
   }
 };
