@@ -11,7 +11,6 @@ const fromCursorHash = string =>
 const messageResolver = {
   Query: {
     messages: async (parent, { cursor, limit = 100 }, { models }) => {
-      console.log("........");
       const cursorOptions = cursor
         ? {
             where: {

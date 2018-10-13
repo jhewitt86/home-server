@@ -51,7 +51,7 @@ const commentResolver = {
         const comment = await models.Comment.create({
           body,
           messageId: messageId,
-          userId: 1 //me.id
+          userId: me.id
         });
 
         pubsub.publish(EVENTS.COMMENT.CREATED, {

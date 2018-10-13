@@ -62,7 +62,7 @@ server.applyMiddleware({ app, path: "/graphql" });
 const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
-const eraseDatabaseOnSync = true;
+const eraseDatabaseOnSync = false;
 
 sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
   if (eraseDatabaseOnSync) {
@@ -96,10 +96,12 @@ const createUsersWithMessages = async date => {
   );
   await models.Comment.create({
     body: "Testing 123",
-    messageId: 1
+    messageId: 1,
+    userId: 1
   });
   await models.Comment.create({
     body: "Testing 45678",
-    messageId: 1
+    messageId: 1,
+    userId: 1
   });
 };
