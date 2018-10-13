@@ -10,7 +10,7 @@ const message = (sequelize, DataTypes) => {
       }
     },
     body: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(5000),
       validate: {
         notEmpty: {
           args: true,
@@ -26,6 +26,9 @@ const message = (sequelize, DataTypes) => {
     },
     public: {
       type: DataTypes.BOOLEAN
+    },
+    commentCount: {
+      type: DataTypes.INTEGER
     }
   });
 

@@ -52,7 +52,8 @@ const messageResolver = {
           title,
           body,
           userId: me.id,
-          public
+          public,
+          commentCount: 0
         });
 
         pubsub.publish(EVENTS.MESSAGE.CREATED, {
@@ -60,6 +61,34 @@ const messageResolver = {
         });
 
         return message;
+      }
+    ),
+
+    incrementComments: combineResolvers(
+      async (parent, { id }, { models, me }) => {
+        const message = await models.Message.findById(id);
+        if (!message) {
+          return false;
+        } else {
+          await message.increment("commentCount");
+          return message;
+        }
+      }
+    ),
+
+    decrementComments: combineResolvers(
+      async (parent, { id }, { models, me }) => {
+        const message = await models.Message.findById(id);
+        if (!message) {
+          return false;
+        } else {
+          if (message.commentCount <= 0) {
+            return message;
+          } else {
+            await message.decrement("commentCount");
+            return message;
+          }
+        }
       }
     ),
 

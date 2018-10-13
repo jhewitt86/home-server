@@ -10,6 +10,8 @@ const messageSchema = gql`
     createMessage(title: String!, body: String!, public: Boolean!): Message!
     deleteMessage(id: ID!): Boolean!
     updateMessage(id: ID!, body: String!): Message!
+    incrementComments(id: ID!): Message!
+    decrementComments(id: ID!): Message!
   }
 
   type MessageConnection {
