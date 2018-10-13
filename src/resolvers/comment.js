@@ -28,11 +28,13 @@ const commentResolver = {
       });
 
       const hasNextPage = comments.length > limit;
+      const total = comments.length;
       const edges = hasNextPage ? comments.slice(0, -1) : comments;
 
       return {
         edges,
         pageInfo: {
+          total,
           hasNextPage,
           endCursor: toCursorHash(edges[edges.length - 1].createdAt.toString())
         }

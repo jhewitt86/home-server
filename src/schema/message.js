@@ -18,6 +18,7 @@ const messageSchema = gql`
   }
 
   type PageInfo {
+    total: Int!
     hasNextPage: Boolean!
     endCursor: String!
   }
@@ -31,6 +32,7 @@ const messageSchema = gql`
     updatedAt: String!
     public: Boolean!
     comments: [Comment!]
+    commentCount: Int!
   }
 
   extend type Subscription {

@@ -27,12 +27,14 @@ const messageResolver = {
       });
 
       const hasNextPage = messages.length > limit;
+      const total = messages.length;
       const edges = hasNextPage ? messages.slice(0, -1) : messages;
 
       return {
         edges,
         pageInfo: {
           hasNextPage,
+          total,
           endCursor: toCursorHash(edges[edges.length - 1].createdAt.toString())
         }
       };
