@@ -10,7 +10,7 @@ const fromCursorHash = string =>
 
 const commentResolver = {
   Query: {
-    comments: async (parent, { cursor, limit = 100 }, { models }) => {
+    comments: async (parent, { cursor, limit = 100 }, { models, me }) => {
       const cursorOptions = cursor
         ? {
             where: {
@@ -47,7 +47,7 @@ const commentResolver = {
 
   Mutation: {
     createComment: combineResolvers(
-      // isAuthenticated,
+      isAuthenticated,
       async (parent, { body, messageId }, { models, me }) => {
         const comment = await models.Comment.create({
           body,

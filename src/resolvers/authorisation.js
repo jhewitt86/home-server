@@ -30,4 +30,9 @@ const isCommentOwner = async (parent, { id }, { models, me }) => {
   return skip;
 };
 
-module.exports = { isAuthenticated, isAdmin, isMessageOwner, isCommentOwner };
+module.exports = {
+  isAuthenticated,
+  isAdmin,
+  isMessageOwner,
+  isCommentOwner
+};
